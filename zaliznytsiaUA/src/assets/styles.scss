@@ -1,3 +1,5 @@
+$main-color: #4c96af;
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -7,7 +9,7 @@ body {
 }
 
 header {
-  background-color: #4c96af;
+  background-color: $main-color;
   color: white;
   padding: 1rem;
   text-align: center;
@@ -19,14 +21,16 @@ nav {
   gap: 1rem;
   background-color: #333;
   padding: 0.5rem 0;
-}
-nav a {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-}
-nav a:hover {
-  background-color: #555;
+
+  a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+
+    &:hover {
+      background-color: #555;
+    }
+  }
 }
 
 .hero {
@@ -38,25 +42,29 @@ nav a:hover {
   padding: 2rem;
   background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
   height: 400px;
-}
-.hero h1 {
-  margin: 0 0 1rem;
-  font-size: 2.5rem;
-}
-.hero p {
-  font-size: 1.2rem;
-  margin: 0 0 1.5rem;
-}
-.hero .btn {
-  background-color: #4c96af;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-.hero .btn:hover {
-  background-color: #256a82;
+
+  h1 {
+    margin: 0 0 1rem;
+    font-size: 2.5rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .btn {
+    background-color: $main-color;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #256a82;
+    }
+  }
 }
 
 footer {
@@ -65,4 +73,4 @@ footer {
   background-color: #333;
   color: white;
   padding: 1rem 0;
-}/*# sourceMappingURL=main-page.css.map */
+}
