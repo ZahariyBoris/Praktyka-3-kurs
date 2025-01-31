@@ -1,66 +1,116 @@
 <template>
 
-  <header>
-    <h1>Залізниця UA</h1>
-  </header>
+  <div id="app">
+    <header>
+      <h1>Залізниця UA</h1>
+      <nav>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/about">About Us</router-link></li>
+        <li><router-link to="/ticket">Buy Tickets</router-link></li>
+        <li><router-link to="/support">Tech Support</router-link></li>
+      </nav>
+    </header>
+    
+    <main>
+      <router-view></router-view>
+    </main>
 
-  <nav>
-    <a href="#">Головна</a>
-    <a href="#">Про нас</a>
-    <a href="#">Квитки</a>
-    <a href="#">Увійти</a>
-  </nav>
-
-  <div class="hero" id="hero">
-    <h1>Створюємо майбутнє разом</h1>
-    <p>Дізнайтеся більше про наші послуги та пропозиції вже сьогодні.</p>
-    <a href="#" class="btn">Дізнатися більше</a>
+    <footer>
+      <p>&copy; 2025 Залізниця UA. Всі права захищені.</p>
+    </footer>
   </div>
-
-  <footer>
-    <p>&copy; 2025 Залізниця UA. Всі права захищені.</p>
-  </footer>
 
 </template>
 
 <script>
 
   export default {
-    mounted() {
-      document.querySelectorAll('nav a').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          const targetElement = document.getElementById(targetId);
-
-          if (targetElement) {
-            targetElement.scrollIntoView ({
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
-        });
-      });
-
-      const heroTexts = [
-        "Швидкі перевезення для кожного!",
-        "Квитки за чудовими цінами",
-        "Купуйте вже зараз!"
-      ];
-      let textIndex = 0;
-      const heroHeading = document.querySelector('.hero h1');
-
-      setInterval(() => {
-        textIndex = (textIndex + 1) % heroTexts.length;
-        heroHeading.textContent = heroTexts[textIndex];
-      }, 3000);
-    }
-  }
+    name: "App",
+  };
 
 </script>
 
 <style lang="scss">
 
-  @import './assets/styles.scss'
+  $main-color: #4c96af;
+
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header {
+    background-color: $main-color;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    background-color: #333;
+    padding: 0.5rem 0;
+
+    a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+
+      &:hover {
+        background-color: #555;
+      }
+    }
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+    height: 400px;
+
+    h1 {
+      margin: 0 0 1rem;
+      font-size: 2.5rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: 0 0 1.5rem;
+    }
+
+    .btn {
+      background-color: $main-color;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #256a82;
+      }
+    }
+  }
+
+  footer {
+    margin-top: auto;
+    text-align: center;
+    background-color: #333;
+    color: white;
+    padding: 1rem 0;
+  }
+
+  li {
+    text-decoration: none;
+  }
 
 </style>
