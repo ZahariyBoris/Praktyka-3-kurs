@@ -4,10 +4,16 @@
     <header>
       <h1>Залізниця UA</h1>
       <nav>
-        <li><router-link to="/">Home</router-link></li>
-        <li><router-link to="/about">About Us</router-link></li>
-        <li><router-link to="/ticket">Buy Tickets</router-link></li>
-        <li><router-link to="/support">Tech Support</router-link></li>
+        <div class="right">
+          <ul><router-link to="/">Home</router-link></ul>
+          <ul><router-link to="/about">About Us</router-link></ul>
+          <ul><router-link to="/ticket">Buy Tickets</router-link></ul>
+          <ul><router-link to="/support">Tech Support</router-link></ul>
+        </div>
+
+        <div class="left">
+          <ul><router-link to="/your-tickets">Your Tickets</router-link></ul>
+        </div>
       </nav>
     </header>
     
@@ -51,10 +57,20 @@
 
   nav {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
     background-color: #333;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1rem;
+
+    .left {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .right {
+      display: flex;
+      gap: 1rem;
+    }
 
     a {
       color: white;
@@ -109,7 +125,7 @@
     padding: 1rem 0;
   }
 
-  li {
+  ul {
     text-decoration: none;
   }
 

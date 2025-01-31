@@ -3,6 +3,7 @@ import AboutUs from "../components/AboutUs.vue";
 import BuyTickets from "../components/BuyTickets.vue";
 import TechSupport from "../components/TechSupport.vue";
 import MainPage from "@/components/MainPage.vue";
+import YourTickets from "../components/YourTickets.vue";
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: "/support",
     name: "Support",
     component: TechSupport,
+  },
+  {
+    path: "/your-tickets",
+    name: "Your Tickets",
+    component: YourTickets,
   },
 ];
 
