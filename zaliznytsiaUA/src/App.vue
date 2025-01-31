@@ -117,8 +117,17 @@
     }
   }
 
+  #app {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  main {
+    flex-grow: 1;
+  }
+
   footer {
-    margin-top: auto;
     text-align: center;
     background-color: #333;
     color: white;
