@@ -7,10 +7,12 @@
         <button class="burger" @click="toggleMenu">&#9776;</button>
         <div :class="['menu', { 'menu--open': isMenuOpen }]">
           <div class="right">
-            <ul><router-link to="/">Home</router-link></ul>
-            <ul><router-link to="/about">About Us</router-link></ul>
-            <ul><router-link to="/ticket">Buy Tickets</router-link></ul>
-            <ul><router-link to="/support">Tech Support</router-link></ul>
+            <ul>
+              <li><router-link to="/">Home</router-link></li>
+              <li><router-link to="/about">About Us</router-link></li>
+              <li><router-link to="/ticket">Buy Tickets</router-link></li>
+              <li><router-link to="/support">Tech Support</router-link></li>
+            </ul>
           </div>
 
           <div class="left">
@@ -72,7 +74,7 @@
     display: flex;
     flex-direction: column;
     background-color: #333;
-    padding: 0.5rem 1rem;
+    padding: 1rem 0rem;
     position: relative;
 
     .burger {
@@ -99,6 +101,7 @@
         color: white;
         text-decoration: none;
         padding: 0.5rem 1rem;
+        margin: 0 5px;
 
         &:hover {
           background-color: #555;
@@ -109,6 +112,11 @@
     .menu--open {
       display: flex;
       flex-direction: column;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 
@@ -131,6 +139,8 @@
 
   ul {
     list-style: none;
+    display: flex;
+    flex-direction: row;
     margin: 0;
     padding: 0;
   }
@@ -147,7 +157,32 @@
 
       .menu--open {
         display: flex;
+        flex-direction: row;
+        font-size: 60%;
+        justify-content: center;
+      }
+
+      .left, .right {
         flex-direction: column;
+      }
+    }
+  }
+
+  @media (max-width: 465px) {
+    nav {
+      .burger {
+        display: block;
+      }
+
+      .menu {
+        display: none;
+      }
+
+      .menu--open {
+        display: flex;
+        flex-direction: column;
+        font-size: 50%;
+        justify-content: center;
       }
 
       .left, .right {
