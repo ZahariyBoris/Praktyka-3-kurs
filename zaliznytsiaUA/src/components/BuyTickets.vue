@@ -46,34 +46,29 @@
 
 <script>
 
+  import { store } from '../store';
+
   export default {
-    name: "BuyTickets",
     data() {
       return {
         stations: ["Київ", "Львів", "Одеса", "Харків", "Дніпро"],
         ticket: {
-          from: "",
-          to: "",
-          date: "",
+          from: '',
+          to: '',
+          date: '',
           quantity: 1,
         },
-        confirmationMessage: "",
       };
     },
     methods: {
       buyTicket() {
-        if (this.ticket.from === this.ticket.to) {
-          this.confirmationMessage = "Станція відправлення та прибуття не можуть бути однаковими.";
-          return;
+        if (this.ticket.from && this.ticket.to && this.ticket.date) {
+          store.addTicket({ ...this.ticket });
+          alert('Білет куплено!');
+          this.ticket = { from: '', to: '', date: '', quantity: 1 };
+        } else {
+          alert('Будь ласка, заповніть усі поля.');
         }
-        this.confirmationMessage = `Квиток(и) успішно придбано: ${this.ticket.quantity} квиток(ів) з ${this.ticket.from} до ${this.ticket.to} на ${this.ticket.date}.`;
-
-        this.ticket = {
-          from: "",
-          to: "",
-          date: "",
-          quantity: 1,
-        };
       },
     },
   };

@@ -16,7 +16,7 @@
           </div>
 
           <div class="left">
-            <ul><router-link to="/your-tickets">Your Tickets</router-link></ul>
+            <ul><li><router-link to="/your-tickets">Your Tickets</router-link></li></ul>
           </div>
         </div>
       </nav>

@@ -8,29 +8,25 @@ import YourTickets from "../components/YourTickets.vue";
 const routes = [
   {
     path: "/",
-    name: "Home",
     component: MainPage,
   },
   {
     path: "/about",
-    name: "About",
     component: AboutUs,
   },
   {
     path: "/ticket",
-    name: "Ticket",
     component: BuyTickets,
   },
   {
     path: "/support",
-    name: "Support",
     component: TechSupport,
   },
   {
     path: "/your-tickets",
-    name: "Your Tickets",
     component: YourTickets,
-  },
+    props: { tickets: [] },
+  },  
 ];
 
 const router = createRouter({
