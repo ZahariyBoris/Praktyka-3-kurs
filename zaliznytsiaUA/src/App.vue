@@ -1,33 +1,30 @@
 <template>
 
   <div id="app">
-    <header>
-      <h1>Залізниця UA</h1>
-      <nav>
+    <header class="header">
+      <div class="container">
+        <h1 class="logo">Залізниця UA</h1>
         <button class="burger" @click="toggleMenu">&#9776;</button>
-        <div :class="['menu', { 'menu--open': isMenuOpen }]">
-          <div class="right">
-            <ul>
-              <li><router-link to="/">Home</router-link></li>
-              <li><router-link to="/about">About Us</router-link></li>
-              <li><router-link to="/ticket">Buy Tickets</router-link></li>
-              <li><router-link to="/support">Tech Support</router-link></li>
-            </ul>
-          </div>
-
-          <div class="left">
-            <ul><li><router-link to="/your-tickets">Your Tickets</router-link></li></ul>
-          </div>
-        </div>
-      </nav>
+        <nav :class="['nav', { 'nav--open': isMenuOpen }]">
+          <ul class="nav__list">
+            <li class="nav__item"><router-link to="/">Головна</router-link></li>
+            <li class="nav__item"><router-link to="/about">Про нас</router-link></li>
+            <li class="nav__item"><router-link to="/ticket">Купити квиток</router-link></li>
+            <li class="nav__item"><router-link to="/support">Підтримка</router-link></li>
+            <li class="nav__item"><router-link to="/your-tickets">Ваші квитки</router-link></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-    <main>
+    <main class="main-content">
       <router-view></router-view>
     </main>
 
-    <footer>
-      <p>&copy; 2025 Залізниця UA. Всі права захищені.</p>
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 Залізниця UA. Всі права захищені.</p>
+      </div>
     </footer>
   </div>
 
@@ -53,140 +50,126 @@
 
 <style lang="scss">
 
-  $main-color: #4c96af;
+  $main-color: #2e3a59;
+  $accent-color: #e3e3e3;
+  $light-color: #f4f4f9;
 
-  body {
+  * {
+    box-sizing: border-box;
     margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
-  header {
-    background-color: $main-color;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-  }
-
-  nav {
-    display: flex;
-    flex-direction: column;
-    background-color: #333;
-    padding: 1rem 0rem;
-    position: relative;
-
-    .burger {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: none;
-    }
-
-    .menu {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-
-      .left, .right {
-        display: flex;
-        gap: 1rem;
-      }
-
-      a {
-        color: white;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        margin: 0 5px;
-
-        &:hover {
-          background-color: #555;
-        }
-      }
-    }
-
-    .menu--open {
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-    }
+  html, body {
+    height: 100%;
   }
 
   #app {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    min-height: 100vh;
   }
 
-  main {
-    flex-grow: 1;
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  footer {
-    text-align: center;
-    background-color: #333;
+  .header {
+    background-color: $main-color;
     color: white;
     padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .burger {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: none;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: center;
+
+      &__list {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      &__item a {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+
+        &:hover {
+          background-color: $accent-color;
+          color: black;
+        }
+      }
+    }
   }
 
-  ul {
-    list-style: none;
+  .main-content {
+    flex-grow: 1;
+    padding: 2rem 0;
     display: flex;
-    flex-direction: row;
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .footer {
+    background-color: $main-color;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: auto;
   }
 
   @media (max-width: 768px) {
-    nav {
+    .header {
       .burger {
         display: block;
       }
 
-      .menu {
+      .nav {
         display: none;
-      }
-
-      .menu--open {
-        display: flex;
-        flex-direction: row;
-        font-size: 60%;
-        justify-content: center;
-      }
-
-      .left, .right {
         flex-direction: column;
+        align-items: center;
+
+        &--open {
+          display: flex;
+          background-color: $main-color;
+          padding: 1rem 0;
+        }
+
+        &__list {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
       }
     }
   }
 
   @media (max-width: 465px) {
-    nav {
-      .burger {
-        display: block;
-      }
-
-      .menu {
-        display: none;
-      }
-
-      .menu--open {
-        display: flex;
-        flex-direction: column;
-        font-size: 50%;
-        justify-content: center;
-      }
-
-      .left, .right {
-        flex-direction: column;
+    .header {
+      .nav {
+        &--open {
+          font-size: 0.9rem;
+        }
       }
     }
   }
