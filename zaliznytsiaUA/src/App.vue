@@ -158,7 +158,7 @@
 
         &__list {
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 1rem;
         }
       }
     }
