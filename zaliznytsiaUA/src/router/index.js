@@ -4,6 +4,7 @@ import BuyTickets from "../components/BuyTickets.vue";
 import TechSupport from "../components/TechSupport.vue";
 import MainPage from "@/components/MainPage.vue";
 import YourTickets from "../components/YourTickets.vue";
+import LoginPage from "../components/LoginPage.vue";
 
 const routes = [
   {
@@ -21,6 +22,10 @@ const routes = [
   {
     path: "/support",
     component: TechSupport,
+  },
+  {
+    path: "/login-page",
+    component: LoginPage,
   },
   {
     path: "/your-tickets",
