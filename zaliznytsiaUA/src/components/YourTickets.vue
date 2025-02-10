@@ -1,11 +1,11 @@
 <template>
-
+  
   <div class="flex flex-col items-center p-8 space-y-8">
     <h1 class="text-3xl font-bold text-center text-gray-800">Ваші квитки</h1>
 
     <ul v-if="tickets.length" ref="ticketList" class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg space-y-4">
       <li v-for="ticket in tickets" :key="ticket.id" class="bg-gray-100 p-4 rounded shadow">
-        {{ ticket.from_station_id }} → {{ ticket.to_station_id }} на {{ ticket.date }} — {{ ticket.quantity }} шт.
+        {{ getStationName(ticket.from_station_id) }} → {{ getStationName(ticket.to_station_id) }} на {{ ticket.date }} — {{ ticket.quantity }} шт.
       </li>
     </ul>
     
@@ -26,10 +26,12 @@
     data() {
       return {
         tickets: [],
+        stations: [],
       };
     },
     async mounted() {
       await this.fetchTickets();
+      await this.fetchStations();
     },
     methods: {
       async fetchTickets() {
@@ -41,6 +43,22 @@
           console.log('Отримані квитки:', data);
           this.tickets = data;
         }
+      },
+
+      async fetchStations() {
+        const { data, error } = await supabase.from('stations').select('*');
+
+        if (error) {
+          console.error('Помилка отримання станцій:', error.message, error);
+        } else {
+          console.log('Отримані станції:', data);
+          this.stations = data;
+        }
+      },
+
+      getStationName(stationId) {
+        const station = this.stations.find(station => station.id === stationId);
+        return station ? station.name : 'Невідома станція';
       },
 
       async downloadPDF() {
