@@ -11,7 +11,7 @@
             <li class="nav__item"><router-link to="/about">Про нас</router-link></li>
             <li class="nav__item"><router-link to="/ticket">Купити квиток</router-link></li>
             <li class="nav__item"><router-link to="/support">Підтримка</router-link></li>
-            <li class="nav__item"><router-link to="/login-page">Увійти</router-link></li>
+            <li class="nav__item"><router-link to="/your-tickets">Ваші квитки</router-link></li>
           </ul>
         </nav>
       </div>

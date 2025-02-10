@@ -11,7 +11,7 @@
 
     <button v-if="tickets.length" @click="downloadPDF" class="download-btn">Завантажити PDF</button>
   </div>
-  
+
 </template>
 
 <script>
@@ -31,23 +31,16 @@
     },
     methods: {
       async fetchTickets() {
-        const { data, error } = await supabase
-          .from('tickets')
-          .select('id, date, quantity, from_station_id, to_station_id, stations_from:stations(name), stations_to:stations(name)')
-          .eq('user_id', '1'); // Тут потрібно підставити реальний ID користувача
+        const { data, error } = await supabase.from('tickets').select('*');
 
         if (error) {
-          console.error('Помилка отримання квитків:', error);
+          console.error('Помилка отримання квитків:', error.message, error);
         } else {
-          this.tickets = data.map(ticket => ({
-            id: ticket.id,
-            date: ticket.date,
-            quantity: ticket.quantity,
-            from_station: ticket.stations_from.name,
-            to_station: ticket.stations_to.name,
-          }));
+          console.log('Отримані квитки:', data);
+          this.tickets = data;
         }
       },
+
       async downloadPDF() {
         const element = this.$refs.ticketList;
         const canvas = await html2canvas(element);
