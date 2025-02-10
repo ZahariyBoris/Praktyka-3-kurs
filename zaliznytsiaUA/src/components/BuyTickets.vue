@@ -8,8 +8,8 @@
         <label for="from">Станція відправлення:</label>
         <select v-model="ticket.from" id="from" required>
           <option disabled value="">Оберіть станцію</option>
-          <option v-for="station in stations" :key="station" :value="station">
-            {{ station }}
+          <option v-for="station in stations" :key="station.id" :value="station.id">
+            {{ station.name }}
           </option>
         </select>
       </div>
@@ -18,8 +18,8 @@
         <label for="to">Станція прибуття:</label>
         <select v-model="ticket.to" id="to" required>
           <option disabled value="">Оберіть станцію</option>
-          <option v-for="station in stations" :key="station" :value="station">
-            {{ station }}
+          <option v-for="station in stations" :key="station.id" :value="station.id">
+            {{ station.name }}
           </option>
         </select>
       </div>
@@ -46,28 +46,54 @@
 
 <script>
 
-  import { store } from '../store';
+  import { supabase } from '@/lib/supabaseClient';
 
   export default {
     data() {
       return {
-        stations: ["Київ", "Львів", "Одеса", "Харків", "Дніпро"],
+        stations: [],
         ticket: {
           from: '',
           to: '',
           date: '',
           quantity: 1,
         },
+        confirmationMessage: '',
       };
     },
+    async mounted() {
+      await this.fetchStations();
+    },
     methods: {
-      buyTicket() {
-        if (this.ticket.from && this.ticket.to && this.ticket.date) {
-          store.addTicket({ ...this.ticket });
-          alert('Білет куплено!');
-          this.ticket = { from: '', to: '', date: '', quantity: 1 };
+      async fetchStations() {
+        const { data, error } = await supabase.from('stations').select('*');
+        if (error) {
+          console.error('Помилка завантаження станцій:', error);
         } else {
+          this.stations = data;
+        }
+      },
+      async buyTicket() {
+        if (!this.ticket.from || !this.ticket.to || !this.ticket.date) {
           alert('Будь ласка, заповніть усі поля.');
+          return;
+        }
+
+        const { error } = await supabase.from('tickets').insert([
+          {
+            from_station_id: this.ticket.from,
+            to_station_id: this.ticket.to,
+            date: this.ticket.date,
+            quantity: this.ticket.quantity,
+          },
+        ]);
+
+        if (error) {
+          console.error('Помилка купівлі квитка:', error);
+          alert('Не вдалося купити квиток.');
+        } else {
+          this.confirmationMessage = 'Білет успішно куплено!';
+          this.ticket = { from: '', to: '', date: '', quantity: 1 };
         }
       },
     },

@@ -1,32 +1,53 @@
 <template>
 
   <div class="your-tickets">
-    <h2>Your tickets</h2>
+    <h2>Ваші квитки</h2>
     <ul v-if="tickets.length" ref="ticketList">
-      <li v-for="(ticket, index) in tickets" :key="index" class="ticket-item">
-        {{ ticket.from }} → {{ ticket.to }} for {{ ticket.date }} — {{ ticket.quantity }} tickets
+      <li v-for="ticket in tickets" :key="ticket.id" class="ticket-item">
+        {{ ticket.from_station }} → {{ ticket.to_station }} на {{ ticket.date }} — {{ ticket.quantity }} квитків
       </li>
     </ul>
-    <p v-else class="empty-cart">Your cart is empty.</p>
+    <p v-else class="empty-cart">Ваш кошик порожній.</p>
 
-    <button v-if="tickets.length" @click="downloadPDF" class="download-btn">Download PDF</button>
+    <button v-if="tickets.length" @click="downloadPDF" class="download-btn">Завантажити PDF</button>
   </div>
-
+  
 </template>
 
 <script>
 
-  import { store } from '../store';
+  import { supabase } from '@/lib/supabaseClient';
   import jsPDF from 'jspdf';
   import html2canvas from 'html2canvas';
 
   export default {
-    computed: {
-      tickets() {
-        return store.tickets;
-      },
+    data() {
+      return {
+        tickets: [],
+      };
+    },
+    async mounted() {
+      await this.fetchTickets();
     },
     methods: {
+      async fetchTickets() {
+        const { data, error } = await supabase
+          .from('tickets')
+          .select('id, date, quantity, from_station_id, to_station_id, stations_from:stations(name), stations_to:stations(name)')
+          .eq('user_id', '1'); // Тут потрібно підставити реальний ID користувача
+
+        if (error) {
+          console.error('Помилка отримання квитків:', error);
+        } else {
+          this.tickets = data.map(ticket => ({
+            id: ticket.id,
+            date: ticket.date,
+            quantity: ticket.quantity,
+            from_station: ticket.stations_from.name,
+            to_station: ticket.stations_to.name,
+          }));
+        }
+      },
       async downloadPDF() {
         const element = this.$refs.ticketList;
         const canvas = await html2canvas(element);
