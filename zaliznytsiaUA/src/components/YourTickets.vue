@@ -20,7 +20,7 @@
 
   import { supabase } from '@/lib/supabaseClient';
   import jsPDF from 'jspdf';
-  import html2canvas from 'html2canvas';
+  import html2canvas from 'html2canvas-pro';
 
   export default {
     data() {
@@ -62,19 +62,26 @@
       },
 
       async downloadPDF() {
-        const element = this.$refs.ticketList;
-        const canvas = await html2canvas(element);
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
+        try {
+          const element = this.$refs.ticketList;
+          const canvas = await html2canvas(element);
+          const imgData = canvas.toDataURL('image/png');
+          
+          console.log('Canvas:', canvas);
+          console.log('Image Data:', imgData);
 
-        const imgWidth = 190;
-        const pageHeight = 295;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          const pdf = new jsPDF('p', 'mm', 'a4');
 
-        let position = 10;
+          const imgWidth = 190;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-        pdf.save('tickets.pdf');
+          let position = 10;
+          pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+
+          pdf.save('tickets.pdf');
+        } catch (error) {
+          console.error('Error generating PDF:', error);
+        }
       },
     },
   };
