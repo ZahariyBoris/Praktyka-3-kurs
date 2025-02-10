@@ -1,22 +1,25 @@
 <template>
+  
+  <div class="flex flex-col items-center p-8 space-y-8">
+    <h1 class="text-3xl font-bold text-center text-gray-800">Contact Us:</h1>
 
-  <div>
-    <h1 class="main-text">Contact Us:</h1>
-
-    <form ref="form" @submit.prevent="sendEmail" class="contact-form">
-      <label>Name</label>
-      <input type="text" name="user_name" required>
-      <label>Email</label>
-      <input type="email" name="user_email" required>
-      <label>Message</label>
-      <textarea name="message" required></textarea>
-      <input type="submit" value="Send">
+    <form ref="form" @submit.prevent="sendEmail" class="w-full max-w-md bg-white p-6 rounded-lg shadow-lg space-y-4">
+      <label class="block font-semibold text-gray-700">Name</label>
+      <input type="text" name="user_name" required class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400">
+      
+      <label class="block font-semibold text-gray-700">Email</label>
+      <input type="email" name="user_email" required class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400">
+      
+      <label class="block font-semibold text-gray-700">Message</label>
+      <textarea name="message" required class="w-full p-2 border border-gray-300 rounded resize-none focus:ring-2 focus:ring-blue-400"></textarea>
+      
+      <input type="submit" value="Send" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 cursor-pointer transition duration-300">
     </form>
 
-    <div v-if="showModal" class="modal-overlay" @click="closeModal">
-      <div class="modal-content" @click.stop>
-        <p>Message sent successfully!</p>
-        <button @click="closeModal">Close</button>
+    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" @click="closeModal">
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center" @click.stop>
+        <p class="text-lg font-semibold text-gray-800">Message sent successfully!</p>
+        <button @click="closeModal" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">Close</button>
       </div>
     </div>
   </div>
@@ -58,109 +61,3 @@
   };
 
 </script>
-
-<style lang="scss">
-
-  .main-text {
-    font-size: 36px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .contact-form {
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    padding-right: 40px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    input[type='text'],
-    input[type='email'],
-    textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-      transition: border-color 0.3s;
-
-      &:focus {
-        border-color: #007bff;
-        outline: none;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-      }
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    input[type='submit'] {
-      background-color: #4c96af;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background-color: #0056b3;
-        transform: scale(1.05);
-      }
-    }
-  }
-
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-
-  .modal-content {
-    background: white;
-    padding: 20px 30px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-    p {
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-
-    button {
-      background-color: #4c96af;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #0056b3;
-      }
-    }
-  }
-
-</style>

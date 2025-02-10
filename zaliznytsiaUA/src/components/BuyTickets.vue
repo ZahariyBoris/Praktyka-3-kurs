@@ -1,12 +1,12 @@
 <template>
 
-  <div class="buy-tickets">
-    <h2>Купівля квитків</h2>
+  <div class="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold text-center text-blue-600 mb-4">Купівля квитків</h2>
 
-    <form @submit.prevent="buyTicket">
-      <div class="form-group">
-        <label for="from">Станція відправлення:</label>
-        <select v-model="ticket.from" id="from" required>
+    <form @submit.prevent="buyTicket" class="space-y-4">
+      <div>
+        <label for="from" class="block text-sm font-medium text-gray-700">Станція відправлення:</label>
+        <select v-model="ticket.from" id="from" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300">
           <option disabled value="">Оберіть станцію</option>
           <option v-for="station in stations" :key="station.id" :value="station.id">
             {{ station.name }}
@@ -14,9 +14,9 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="to">Станція прибуття:</label>
-        <select v-model="ticket.to" id="to" required>
+      <div>
+        <label for="to" class="block text-sm font-medium text-gray-700">Станція прибуття:</label>
+        <select v-model="ticket.to" id="to" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300">
           <option disabled value="">Оберіть станцію</option>
           <option v-for="station in stations" :key="station.id" :value="station.id">
             {{ station.name }}
@@ -24,20 +24,20 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="date">Дата відправлення:</label>
-        <input type="date" v-model="ticket.date" id="date" required />
+      <div>
+        <label for="date" class="block text-sm font-medium text-gray-700">Дата відправлення:</label>
+        <input type="date" v-model="ticket.date" id="date" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300" />
       </div>
 
-      <div class="form-group">
-        <label for="quantity">Кількість квитків:</label>
-        <input type="number" v-model.number="ticket.quantity" id="quantity" min="1" max="10" required />
+      <div>
+        <label for="quantity" class="block text-sm font-medium text-gray-700">Кількість квитків:</label>
+        <input type="number" v-model.number="ticket.quantity" id="quantity" min="1" max="10" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300" />
       </div>
 
-      <button type="submit">Купити квиток</button>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Купити квиток</button>
     </form>
 
-    <div v-if="confirmationMessage" class="confirmation">
+    <div v-if="confirmationMessage" class="mt-4 p-3 text-green-800 bg-green-100 border border-green-400 rounded-lg text-center">
       {{ confirmationMessage }}
     </div>
   </div>
@@ -100,64 +100,3 @@
   };
 
 </script>
-
-<style scoped lang="scss">
-
-  .buy-tickets {
-    max-width: 400px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-    h2 {
-      text-align: center;
-      color: #4c96af;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-      }
-
-      input,
-      select {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-    }
-
-    button {
-      width: 100%;
-      padding: 0.75rem;
-      background-color: #4c96af;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-
-      &:hover {
-        background-color: #3b7e94;
-      }
-    }
-
-    .confirmation {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-      border-radius: 5px;
-      text-align: center;
-    }
-  }
-
-</style>

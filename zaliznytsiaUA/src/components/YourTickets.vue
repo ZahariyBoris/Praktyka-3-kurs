@@ -1,15 +1,17 @@
 <template>
 
-  <div class="your-tickets">
-    <h2>Ваші квитки</h2>
-    <ul v-if="tickets.length" ref="ticketList">
-      <li v-for="ticket in tickets" :key="ticket.id" class="ticket-item">
-        {{ ticket.from_station }} → {{ ticket.to_station }} на {{ ticket.date }} — {{ ticket.quantity }} квитків
+  <div class="flex flex-col items-center p-8 space-y-8">
+    <h1 class="text-3xl font-bold text-center text-gray-800">Ваші квитки</h1>
+
+    <ul v-if="tickets.length" ref="ticketList" class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg space-y-4">
+      <li v-for="ticket in tickets" :key="ticket.id" class="bg-gray-100 p-4 rounded shadow">
+        {{ ticket.from_station_id }} → {{ ticket.to_station_id }} на {{ ticket.date }} — {{ ticket.quantity }} шт.
       </li>
     </ul>
-    <p v-else class="empty-cart">Ваш кошик порожній.</p>
+    
+    <p v-else class="text-gray-500 text-center italic">Ваш кошик порожній.</p>
 
-    <button v-if="tickets.length" @click="downloadPDF" class="download-btn">Завантажити PDF</button>
+    <button v-if="tickets.length" @click="downloadPDF" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">Завантажити PDF</button>
   </div>
 
 </template>
@@ -60,64 +62,3 @@
   };
 
 </script>
-
-<style scoped lang="scss">
-
-  .your-tickets {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-    h2 {
-      text-align: center;
-      color: #4c96af;
-    }
-
-    .empty-cart {
-      text-align: center;
-      color: #777;
-      font-style: italic;
-      padding: 1rem;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-
-    .ticket-item {
-      background-color: #fff;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      font-weight: bold;
-      color: #333;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #e6f7fb;
-      }
-    }
-
-    .download-btn {
-      display: block;
-      margin: 1rem auto;
-      padding: 0.75rem 1.5rem;
-      background-color: #4c96af;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #3b7c90;
-      }
-    }
-  }
-
-</style>
