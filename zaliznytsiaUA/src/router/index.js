@@ -5,6 +5,7 @@ import TechSupport from "../components/TechSupport.vue";
 import MainPage from "@/components/MainPage.vue";
 import YourTickets from "../components/YourTickets.vue";
 import LoginPage from "../components/LoginPage.vue";
+import RegisterPage from "../components/RegisterPage.vue";
 
 const routes = [
   {
@@ -22,6 +23,10 @@ const routes = [
   {
     path: "/support",
     component: TechSupport,
+  },
+  {
+    path: "/register",
+    component: RegisterPage,
   },
   {
     path: "/login-page",
