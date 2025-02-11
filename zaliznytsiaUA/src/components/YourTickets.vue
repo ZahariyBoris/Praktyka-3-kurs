@@ -1,5 +1,5 @@
 <template>
-  
+
   <div class="flex flex-col items-center p-8 space-y-8">
     <h1 class="text-3xl font-bold text-center text-gray-800">Ваші квитки</h1>
 
@@ -8,10 +8,12 @@
         {{ getStationName(ticket.from_station_id) }} → {{ getStationName(ticket.to_station_id) }} на {{ ticket.date }} — {{ ticket.quantity }} шт.
       </li>
     </ul>
-    
+
     <p v-else class="text-gray-500 text-center italic">Ваш кошик порожній.</p>
 
-    <button v-if="tickets.length" @click="downloadPDF" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">Завантажити PDF</button>
+    <button v-if="tickets.length" @click="downloadPDF" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
+      Завантажити PDF
+    </button>
   </div>
 
 </template>
@@ -30,29 +32,23 @@
       };
     },
     async mounted() {
-      await this.fetchTickets();
       await this.fetchStations();
+      await this.fetchTickets();
     },
     methods: {
       async fetchTickets() {
-        const { data, error } = await supabase.from('tickets').select('*');
+        const { data: userData } = await supabase.auth.getUser();
+        if (!userData?.user) return;
+
+        const { data, error } = await supabase
+          .from('tickets')
+          .select('*')
+          .eq('user_id', userData.user.id);
 
         if (error) {
-          console.error('Помилка отримання квитків:', error.message, error);
+          console.error('Помилка отримання квитків:', error.message);
         } else {
-          console.log('Отримані квитки:', data);
           this.tickets = data;
-        }
-      },
-
-      async fetchStations() {
-        const { data, error } = await supabase.from('stations').select('*');
-
-        if (error) {
-          console.error('Помилка отримання станцій:', error.message, error);
-        } else {
-          console.log('Отримані станції:', data);
-          this.stations = data;
         }
       },
 
@@ -66,21 +62,15 @@
           const element = this.$refs.ticketList;
           const canvas = await html2canvas(element);
           const imgData = canvas.toDataURL('image/png');
-          
-          console.log('Canvas:', canvas);
-          console.log('Image Data:', imgData);
 
           const pdf = new jsPDF('p', 'mm', 'a4');
-
           const imgWidth = 190;
           const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-          let position = 10;
-          pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-
+          pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
           pdf.save('tickets.pdf');
         } catch (error) {
-          console.error('Error generating PDF:', error);
+          console.error('Помилка створення PDF:', error);
         }
       },
     },

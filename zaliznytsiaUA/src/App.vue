@@ -11,7 +11,7 @@
             <li class="py-2 md:py-0"><router-link class="block px-4 py-2 hover:bg-gray-200 hover:text-black rounded-md" to="/about">Про нас</router-link></li>
             <li class="py-2 md:py-0"><router-link class="block px-4 py-2 hover:bg-gray-200 hover:text-black rounded-md" to="/ticket">Купити квиток</router-link></li>
             <li class="py-2 md:py-0"><router-link class="block px-4 py-2 hover:bg-gray-200 hover:text-black rounded-md" to="/support">Підтримка</router-link></li>
-            <li class="py-2 md:py-0"><router-link class="block px-4 py-2 hover:bg-gray-200 hover:text-black rounded-md" to="/your-tickets">Ваші квитки</router-link></li>
+            <li class="py-2 md:py-0"><router-link class="block px-4 py-2 hover:bg-gray-200 hover:text-black rounded-md" to="/login-page">Увійти</router-link></li>
           </ul>
         </nav>
       </div>

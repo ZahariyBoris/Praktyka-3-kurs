@@ -67,13 +67,21 @@
     methods: {
       async fetchStations() {
         const { data, error } = await supabase.from('stations').select('*');
+
         if (error) {
-          console.error('Помилка завантаження станцій:', error);
+          console.error('Помилка отримання станцій:', error.message);
         } else {
           this.stations = data;
         }
       },
+
       async buyTicket() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          alert("Ви не залогінені!");
+          return;
+        }
+
         if (!this.ticket.from || !this.ticket.to || !this.ticket.date) {
           alert('Будь ласка, заповніть усі поля.');
           return;
@@ -85,6 +93,7 @@
             to_station_id: this.ticket.to,
             date: this.ticket.date,
             quantity: this.ticket.quantity,
+            user_id: user.id,
           },
         ]);
 
@@ -92,7 +101,7 @@
           console.error('Помилка купівлі квитка:', error);
           alert('Не вдалося купити квиток.');
         } else {
-          this.confirmationMessage = 'Білет успішно куплено!';
+          this.confirmationMessage = 'Квиток успішно куплено!';
           this.ticket = { from: '', to: '', date: '', quantity: 1 };
         }
       },
