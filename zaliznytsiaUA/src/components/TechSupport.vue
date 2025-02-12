@@ -16,7 +16,7 @@
       <input type="submit" value="Надіслати" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 cursor-pointer transition duration-300">
     </form>
 
-    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" @click="closeModal">
+    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50" @click="closeModal">
       <div class="bg-white p-6 rounded-lg shadow-lg text-center" @click.stop>
         <p class="text-lg font-semibold text-gray-800">Повідомлення надіслано!</p>
         <button @click="closeModal" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">Закрити</button>
