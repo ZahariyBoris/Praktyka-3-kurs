@@ -1,7 +1,15 @@
 <template>
-
+  
   <div class="flex flex-col items-center p-8 space-y-8">
     <h1 class="text-3xl font-bold text-center text-gray-800">Ваші квитки</h1>
+
+    <div v-if="userEmail" class="text-lg font-semibold text-gray-700">
+      Ви увійшли як: {{ userEmail }}
+    </div>
+
+    <button @click="logout" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300">
+      Вийти
+    </button>
 
     <ul v-if="tickets.length" ref="ticketList" class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg space-y-4">
       <li v-for="ticket in tickets" :key="ticket.id" class="bg-gray-100 p-4 rounded shadow">
@@ -29,32 +37,64 @@
       return {
         tickets: [],
         stations: [],
+        userEmail: null,
+        userId: null,
       };
     },
     async mounted() {
+      await this.fetchUser();
       await this.fetchStations();
       await this.fetchTickets();
     },
     methods: {
+      async fetchUser() {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) {
+          console.error('Помилка отримання користувача:', error.message);
+          return;
+        }
+        if (user) {
+          this.userEmail = user.email;
+          this.userId = user.id;
+        }
+      },
+
       async fetchTickets() {
-        const { data: userData } = await supabase.auth.getUser();
-        if (!userData?.user) return;
+        if (!this.userId) {
+          console.warn('Користувач не знайдений, квитки не будуть завантажені.');
+          return;
+        }
 
         const { data, error } = await supabase
           .from('tickets')
           .select('*')
-          .eq('user_id', userData.user.id);
+          .eq('user_id', this.userId);
 
         if (error) {
           console.error('Помилка отримання квитків:', error.message);
         } else {
+          console.log('Отримані квитки:', data);
           this.tickets = data;
+        }
+      },
+
+      async fetchStations() {
+        const { data, error } = await supabase.from('stations').select('*');
+        if (error) {
+          console.error('Помилка отримання станцій:', error.message);
+        } else {
+          this.stations = data;
         }
       },
 
       getStationName(stationId) {
         const station = this.stations.find(station => station.id === stationId);
         return station ? station.name : 'Невідома станція';
+      },
+
+      async logout() {
+        await supabase.auth.signOut();
+        window.location.href = '/login-page';
       },
 
       async downloadPDF() {

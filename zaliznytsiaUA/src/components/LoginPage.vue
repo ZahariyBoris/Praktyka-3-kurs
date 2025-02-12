@@ -31,6 +31,11 @@
       <div v-if="errorMessage" class="text-red-500 mt-4 text-center">
         {{ errorMessage }}
       </div>
+      <div class="text-center mt-4">
+        <p class="text-sm">Не маєте акаунту? 
+          <router-link to="/register" class="text-blue-500 hover:underline">Зареєструйтеся</router-link>
+        </p>
+      </div>
     </form>
   </div>
 
