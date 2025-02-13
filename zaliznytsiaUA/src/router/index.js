@@ -6,6 +6,7 @@ import MainPage from "@/components/MainPage.vue";
 import YourTickets from "../components/YourTickets.vue";
 import LoginPage from "../components/LoginPage.vue";
 import RegisterPage from "../components/RegisterPage.vue";
+import TicketView from "../components/TicketView.vue";
 
 const routes = [
   {
@@ -27,6 +28,10 @@ const routes = [
   {
     path: "/register",
     component: RegisterPage,
+  },
+  {
+    path: "/ticket-view",
+    component: TicketView,
   },
   {
     path: "/login-page",
