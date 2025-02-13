@@ -30,7 +30,7 @@ const routes = [
     component: RegisterPage,
   },
   {
-    path: "/ticket-view",
+    path: "/ticket-view/:id",
     component: TicketView,
   },
   {

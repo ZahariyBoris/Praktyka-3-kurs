@@ -13,7 +13,7 @@
 
     <ul v-if="tickets.length" ref="ticketList" class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg space-y-4">
       <li v-for="ticket in tickets" :key="ticket.id" class="bg-gray-100 p-4 rounded shadow">
-        {{ getStationName(ticket.from_station_id) }} → {{ getStationName(ticket.to_station_id) }} на {{ ticket.date }} — {{ ticket.quantity }} шт.
+        <RouterLink :to="'/ticket-view/' + ticket.id">{{ getStationName(ticket.from_station_id) }} → {{ getStationName(ticket.to_station_id) }} на {{ ticket.date }} — {{ ticket.quantity }} шт.</RouterLink>
       </li>
     </ul>
 
@@ -31,6 +31,7 @@
   import { supabase } from '@/lib/supabaseClient';
   import jsPDF from 'jspdf';
   import html2canvas from 'html2canvas-pro';
+import { RouterLink } from 'vue-router';
 
   export default {
     data() {
