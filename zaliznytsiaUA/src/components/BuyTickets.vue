@@ -1,44 +1,40 @@
 <template>
   
-  <div class="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-semibold text-center text-blue-600 mb-4">Купівля квитків</h2>
+  <div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold text-center text-blue-600 mb-4">Доступні квитки</h2>
 
-    <form @submit.prevent="buyTicket" class="space-y-4">
-      <div>
-        <label for="from" class="block text-sm font-medium text-gray-700">Станція відправлення:</label>
-        <select v-model="ticket.from" id="from" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300">
-          <option disabled value="">Оберіть станцію</option>
+    <form @submit.prevent="searchTickets" class="mb-4">
+      <div class="flex space-x-2">
+        <select v-model="search.from" required class="w-full p-2 border rounded-lg">
+          <option disabled value="">Станція відправлення</option>
           <option v-for="station in stations" :key="station.id" :value="station.id">
             {{ station.name }}
           </option>
         </select>
-      </div>
-
-      <div>
-        <label for="to" class="block text-sm font-medium text-gray-700">Станція прибуття:</label>
-        <select v-model="ticket.to" id="to" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300">
-          <option disabled value="">Оберіть станцію</option>
+        <select v-model="search.to" required class="w-full p-2 border rounded-lg">
+          <option disabled value="">Станція прибуття</option>
           <option v-for="station in stations" :key="station.id" :value="station.id">
             {{ station.name }}
           </option>
         </select>
+        <input type="date" v-model="search.date" :min="minDate" required class="p-2 border rounded-lg">
+        <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Шукати</button>
       </div>
-
-      <div>
-        <label for="date" class="block text-sm font-medium text-gray-700">Дата відправлення:</label>
-        <input type="date" v-model="ticket.date" id="date" :min="minDate" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300" />
-      </div>
-
-      <div>
-        <label for="quantity" class="block text-sm font-medium text-gray-700">Кількість квитків:</label>
-        <input type="number" v-model.number="ticket.quantity" id="quantity" min="1" max="10" required class="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-blue-300" />
-      </div>
-
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Купити квиток</button>
     </form>
 
-    <div v-if="confirmationMessage" class="mt-4 p-3 text-green-800 bg-green-100 border border-green-400 rounded-lg text-center">
-      {{ confirmationMessage }}
+    <div v-if="loading" class="text-center">Завантаження...</div>
+    <div v-else-if="tickets.length === 0" class="text-center text-gray-600">Квитки не знайдено</div>
+    <div v-else>
+      <div v-for="ticket in tickets" :key="ticket.id" class="border p-4 rounded-lg mb-2">
+        <p><strong>Маршрут:</strong> {{ ticket.route.from_station.name }} → {{ ticket.route.to_station.name }}</p>
+        <p><strong>Дата:</strong> {{ ticket.date }}</p>
+        <p><strong>Ціна:</strong> {{ ticket.price }} грн</p>
+        <p><strong>Доступні місця:</strong> {{ ticket.available_seats }}</p>
+        <p><strong>Місце:</strong> {{ ticket.seat_num }}</p>
+        <p><strong>VIP:</strong> {{ ticket.is_vip ? 'Так' : 'Ні' }}</p>
+        <p><strong>Дозволені тварини:</strong> {{ ticket.pets_allowed ? 'Так' : 'Ні' }}</p>
+        <button @click="buyTicket(ticket)" class="mt-2 bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-700">Купити</button>
+      </div>
     </div>
   </div>
 
@@ -52,13 +48,13 @@
     data() {
       return {
         stations: [],
-        ticket: {
+        search: {
           from: "",
           to: "",
           date: "",
-          quantity: 1,
         },
-        confirmationMessage: "",
+        tickets: [],
+        loading: false,
       };
     },
     computed: {
@@ -72,49 +68,43 @@
     methods: {
       async fetchStations() {
         const { data, error } = await supabase.from("stations").select("*");
-
-        if (error) {
-          console.error("Помилка отримання станцій:", error.message);
-        } else {
-          this.stations = data;
-        }
+        if (!error) this.stations = data;
       },
-
-      async buyTicket() {
+      async searchTickets() {
+        if (!this.search.from || !this.search.to || !this.search.date) {
+          alert("Будь ласка, заповніть усі поля.");
+          return;
+        }
+        this.loading = true;
+        const { data, error } = await supabase
+          .from("tickets")
+          .select("*, route:routes(*, from_station:stations!from_station_id(*), to_station:stations!to_station_id(*))")
+          .eq("route.from_station_id", this.search.from)
+          .eq("route.to_station_id", this.search.to)
+          .eq("date", this.search.date);
+        
+        if (error) {
+          console.error("Помилка отримання квитків:", error.message);
+          this.tickets = [];
+        } else {
+          this.tickets = data;
+        }
+        this.loading = false;
+      },
+      async buyTicket(ticket) {
         const { data: userData } = await supabase.auth.getUser();
         if (!userData?.user) {
           alert("Ви не залогінені!");
           return;
         }
-
-        if (!this.ticket.from || !this.ticket.to || !this.ticket.date) {
-          alert("Будь ласка, заповніть усі поля.");
-          return;
-        }
-
-        if (this.ticket.from === this.ticket.to) {
-          alert("Станції відправлення та прибуття не можуть бути однаковими.");
-          return;
-        }
-
-        const { error } = await supabase.from("tickets").insert([
+        
+        const { error } = await supabase.from("purchased_tickets").insert([
           {
-            from_station_id: this.ticket.from,
-            to_station_id: this.ticket.to,
-            date: this.ticket.date,
-            quantity: this.ticket.quantity,
+            ticket_id: ticket.id,
             user_id: userData.user.id,
           },
         ]);
-
-        if (error) {
-          console.error("Помилка купівлі квитка:", error);
-          alert("Не вдалося купити квиток.");
-        } else {
-          this.confirmationMessage = "Квиток успішно куплено!";
-          this.ticket = { from: "", to: "", date: "", quantity: 1 };
-          setTimeout(() => (this.confirmationMessage = ""), 3000);
-        }
+        if (!error) alert("Квиток успішно куплено!");
       },
     },
   };
