@@ -13,10 +13,13 @@
     <div v-if="loading" class="text-gray-500 text-center italic">Завантаження квитків...</div>
 
     <ul v-else-if="tickets.length" ref="ticketList" class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg space-y-4">
-      <li v-for="ticket in tickets" :key="ticket.id" class="bg-gray-100 p-4 rounded shadow">
+      <li v-for="ticket in tickets" :key="ticket.id" class="bg-gray-100 p-4 rounded shadow flex justify-between">
         <RouterLink :to="'/ticket-view/' + ticket.ticket_id">
-          {{ getStationName(ticket.from_station_id) }} → {{ getStationName(ticket.to_station_id) }} на {{ ticket.date }} — {{ ticket.quantity }} шт.
+          {{ getStationName(ticket.from_station_id) }} → {{ getStationName(ticket.to_station_id) }} на {{ ticket.date }}
         </RouterLink>
+        <button @click="deleteTicket(ticket.id)" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300">
+          Видалити
+        </button>
       </li>
     </ul>
 
@@ -105,6 +108,24 @@ export default {
     async logout() {
       await supabase.auth.signOut();
       window.location.href = '/login-page';
+    },
+
+    async deleteTicket(ticketId) {
+      try {
+        const { error } = await supabase
+          .from('purchased_tickets')
+          .delete()
+          .eq('id', ticketId);
+
+        if (error) {
+          console.error('Помилка видалення квитка:', error.message);
+        } else {
+          // Видалити квиток із локального списку
+          this.tickets = this.tickets.filter(ticket => ticket.id !== ticketId);
+        }
+      } catch (error) {
+        console.error('Помилка при видаленні квитка:', error);
+      }
     },
 
     async downloadPDF() {

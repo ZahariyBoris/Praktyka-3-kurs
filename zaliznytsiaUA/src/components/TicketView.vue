@@ -7,7 +7,6 @@
       <p class="text-lg"><strong>Відправлення:</strong> {{ getStationName(ticket.from_station_id) }}</p>
       <p class="text-lg"><strong>Прибуття:</strong> {{ getStationName(ticket.to_station_id) }}</p>
       <p class="text-lg"><strong>Дата:</strong> {{ ticket.date }}</p>
-      <p class="text-lg"><strong>Кількість:</strong> {{ ticket.quantity }} шт.</p>
     </div>
     
     <p v-else class="text-center text-gray-500">Квиток не знайдено.</p>
